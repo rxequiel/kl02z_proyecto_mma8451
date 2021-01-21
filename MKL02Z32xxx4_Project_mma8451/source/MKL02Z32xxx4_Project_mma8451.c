@@ -61,6 +61,10 @@ int main(void) {
     status_t status;
     uint8_t nuevo_byte_uart;
 	uint8_t nuevo_dato_i2c;
+	uint16_t nuevo_dato_i2c_1;
+	uint16_t nuevo_dato_i2c_2;
+	uint16_t valor_acelerometro;
+	uint16_t aux1;
   	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -79,12 +83,11 @@ int main(void) {
     PRINTF("a-A led AZUL\r\n");
     PRINTF("M buscar acelerometro\r\n");
 
-
     while(1) {
+
     	if(uart0CuantosDatosHayEnBuffer()>0){
     		status=uart0LeerByteDesdeBuffer(&nuevo_byte_uart);
     		if(status==kStatus_Success){
-    			printf("dato:%c\r\n",nuevo_byte_uart);
     			switch (nuevo_byte_uart) {
 				case 'a':
 				case 'A':
@@ -114,11 +117,47 @@ int main(void) {
 						printf("MMA8451 error\r\n");
 
 					break;
-				}
+
+    			case 'x':
+    			case 'X':
+    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x01);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x02);
+
+    				aux1=nuevo_dato_i2c_1<<8;
+    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
+
+    				printf("valor acelerometro en x:%d\r\n",valor_acelerometro);
+
+    				break;
+    			case 'y':
+    			case 'Y':
+    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x03);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x04);
+
+    				aux1=nuevo_dato_i2c_1<<8;
+    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
+
+    				printf("valor acelerometro en y:%d\r\n",valor_acelerometro);
+
+    				break;
+    			case 'z':
+    			case 'Z':
+    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x05);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x06);
+
+    				aux1=nuevo_dato_i2c_1<<8;
+    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
+
+    				printf("valor acelerometro en z:%d\r\n",valor_acelerometro);
+
+    				break;
+    			}
+
     		}else{
     			printf("error\r\n");
     		}
     	}
+
     }
 
     return 0 ;

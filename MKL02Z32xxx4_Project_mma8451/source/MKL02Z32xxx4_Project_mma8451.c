@@ -65,6 +65,7 @@
 //-----------------
 int main(void) {
     status_t status;
+    status_t status1;
     uint8_t nuevo_byte_uart;
 	uint8_t nuevo_dato_i2c;
 	uint16_t nuevo_dato_i2c_1;
@@ -88,6 +89,7 @@ int main(void) {
 
     (void)uart0Inicializar(115200);	//115200bps
     (void)i2c0MasterInit(100000);	//100kbps
+  status1=i2c0MasterWriteByte(MMA851_I2C_DEVICE_ADDRESS,0X2A, 1);
 
     PRINTF("Usar teclado para controlar LEDs\r\n");
     PRINTF("r-R led ROJO\r\n");
@@ -138,6 +140,7 @@ int main(void) {
     				nuevo_dato_i2c_1<<=8;
     				valor_acelerometro_x=nuevo_dato_i2c_1|nuevo_dato_i2c_2;
     				valor_acelerometro_x>>=2;
+    				//PRINTF("x_MSB-> %d | x_LSB-> %d\r\n",nuevo_dato_i2c_1,nuevo_dato_i2c_2);
     				printf("valor acelerometro en x:%d\r\n",valor_acelerometro_x);
 
     				break;

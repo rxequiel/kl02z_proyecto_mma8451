@@ -52,8 +52,14 @@
  */
 //define
 #define MMA851_I2C_DEVICE_ADDRESS	0x1D
-
 #define MMA8451_WHO_AM_I_MEMORY_ADDRESS		0x0D
+//___________
+#define MMA8451_OUT_X_MSB_MEMORY_ADDRESS		0x01
+#define MMA8451_OUT_X_LSB_MEMORY_ADDRESS		0x02
+#define MMA8451_OUT_Y_MSB_MEMORY_ADDRESS		0x03
+#define MMA8451_OUT_Y_LSB_MEMORY_ADDRESS		0x04
+#define MMA8451_OUT_Z_MSB_MEMORY_ADDRESS		0x05
+#define MMA8451_OUT_Z_LSB_MEMORY_ADDRESS		0x06
 
 
 //-----------------
@@ -63,8 +69,14 @@ int main(void) {
 	uint8_t nuevo_dato_i2c;
 	uint16_t nuevo_dato_i2c_1;
 	uint16_t nuevo_dato_i2c_2;
-	uint16_t valor_acelerometro;
-	uint16_t aux1;
+	uint16_t nuevo_dato_i2c_3;
+	uint16_t nuevo_dato_i2c_4;
+	uint16_t nuevo_dato_i2c_5;
+	uint16_t nuevo_dato_i2c_6;
+	uint16_t valor_acelerometro_x;
+	uint16_t valor_acelerometro_y;
+	uint16_t valor_acelerometro_z;
+
   	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -120,35 +132,35 @@ int main(void) {
 
     			case 'x':
     			case 'X':
-    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x01);
-    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x02);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_X_MSB_MEMORY_ADDRESS);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_X_LSB_MEMORY_ADDRESS);
 
-    				aux1=nuevo_dato_i2c_1<<8;
-    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
-
-    				printf("valor acelerometro en x:%d\r\n",valor_acelerometro);
+    				nuevo_dato_i2c_1<<=8;
+    				valor_acelerometro_x=nuevo_dato_i2c_1|nuevo_dato_i2c_2;
+    				valor_acelerometro_x>>=2;
+    				printf("valor acelerometro en x:%d\r\n",valor_acelerometro_x);
 
     				break;
     			case 'y':
     			case 'Y':
-    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x03);
-    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x04);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_3, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_Y_MSB_MEMORY_ADDRESS);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_4, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_Y_LSB_MEMORY_ADDRESS);
 
-    				aux1=nuevo_dato_i2c_1<<8;
-    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
-
-    				printf("valor acelerometro en y:%d\r\n",valor_acelerometro);
+    				nuevo_dato_i2c_3<<=8;
+    				valor_acelerometro_y=nuevo_dato_i2c_3|nuevo_dato_i2c_4;
+    				valor_acelerometro_y>>=2;
+    				printf("valor acelerometro en y:%d\r\n",valor_acelerometro_y);
 
     				break;
     			case 'z':
     			case 'Z':
-    				i2c0MasterReadByte(&nuevo_dato_i2c_1, MMA851_I2C_DEVICE_ADDRESS,0x05);
-    				i2c0MasterReadByte(&nuevo_dato_i2c_2, MMA851_I2C_DEVICE_ADDRESS,0x06);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_5, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_Z_MSB_MEMORY_ADDRESS);
+    				i2c0MasterReadByte(&nuevo_dato_i2c_6, MMA851_I2C_DEVICE_ADDRESS,MMA8451_OUT_Z_LSB_MEMORY_ADDRESS);
 
-    				aux1=nuevo_dato_i2c_1<<8;
-    				valor_acelerometro=aux1 | nuevo_dato_i2c_2;
-
-    				printf("valor acelerometro en z:%d\r\n",valor_acelerometro);
+    				nuevo_dato_i2c_5<<=8;
+    				valor_acelerometro_z=nuevo_dato_i2c_5|nuevo_dato_i2c_6;
+    				valor_acelerometro_z>>=2;
+    				printf("valor acelerometro en z:%d\r\n",valor_acelerometro_z);
 
     				break;
     			}
